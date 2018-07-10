@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package io.netifi.proteus.demo.chat;
+
+option java_package = "io.netifi.proteus.demo.chat";
+option java_outer_classname = "ChatServiceProto";
+option java_multiple_files = true;
+
+import "google/protobuf/empty.proto";
+
+service ChatService {
+
+    // Returns a Hello World Message
+    rpc Chat (ChatMessage) returns (google.protobuf.Empty) {}
+}
+
+message ChatMessage {
+    string message = 1;
+}
+
