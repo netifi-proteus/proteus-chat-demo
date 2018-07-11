@@ -3,46 +3,33 @@ const {
 	Single
 } = require('rsocket-flowable');
 
-export default function(onMessage) {
+const {
+	ChatServer
+} = require('./proto/chat_proteus_pb');
 
-	return {
-		/**
-		 * Fire and Forget interaction model of `ReactiveSocket`. The returned
-		 * Publisher resolves when the passed `payload` is successfully handled.
-		 */
+export default function(next) {
 
-		fireAndForget: onMessage,
+	const handler = {
+			chat: function(chatEvent, metadata){
+				// needs to produce below for the rest of the handling chain
+				//{"type":"CHAT_MESSAGE","payload":{"user":{"alias":"asdfasdfasdf","avatar":"https://robohash.org/asdfasdfasdf.png"},"message":"hello"}}
+				let message = {type: "CHAT_MESSAGE", payload:{}};
+				const user = chatEvent.getUser();
+				message.payload.user = {alias: user.getAlias(), avatar: user.getAvatar()};
+				message.payload.message = chatEvent.getMessage();
 
-		/** NOT USED IN THIS EXAMPLE
-		 * Request-Response interaction model of `ReactiveSocket`. The returned
-		 * Publisher resolves with the response.
-		 */
-		requestResponse: function requestResponse(payload) {
-			return Single.error(new Error('metadataPush() is not implemented'));
-		},
+				next({data: JSON.stringify(message)});
+			},
+			join: function(joinEvent, metadata){
+				// needs to produce below for the rest of the handling chain
+				// {"type":"USER_JOINED","payload":{"user":{"alias":"gagaga","avatar":"https://robohash.org/gagaga.png"}}}
+				let message = {type: "USER_JOINED", payload:{}};
+				const user = joinEvent.getUser();
+				message.payload.user = {alias: user.getAlias(), avatar: user.getAvatar()};
 
-		/** NOT USED IN THIS EXAMPLE
-		 * Request-Stream interaction model of `ReactiveSocket`. The returned
-		 * Publisher returns values representing the response(s).
-		 */
-		requestStream: function requestStream(payload) {
-			return Flowable.error(new Error('requestChannel() is not implemented'));
-		},
-
-		/** NOT USED IN THIS EXAMPLE
-		 * Request-Channel interaction model of `ReactiveSocket`. The returned
-		 * Publisher returns values representing the response(s).
-		 */
-		requestChannel: function requestChannel(payloads) {
-			return Flowable.error(new Error('requestChannel() is not implemented'));
-		},
-
-		/** NOT USED IN THIS EXAMPLE
-		 * Metadata-Push interaction model of `ReactiveSocket`. The returned Publisher
-		 * resolves when the passed `payload` is successfully handled.
-		 */
-		metadataPush: function metadataPush(payload) {
-			return Single.error(new Error('metadataPush() is not implemented'));
-		}
+				next({data: JSON.stringify(message)});
+			}
 	};
+
+	return new ChatServer(handler);
 };

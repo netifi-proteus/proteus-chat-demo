@@ -4,7 +4,8 @@
   "description": "Proteus Reactive Chat Application",
   "scripts": {
     "build": "webpack --config webpack.production.config.js",
-    "start": "webpack --config webpack.production.config.js && http-server ./build/resources/main/ -a 127.0.0.1 -p 3000 -c-1"
+    "start": "webpack --config webpack.production.config.js && http-server ./build/resources/main/ -a 127.0.0.1 -p 3000 -c-1",
+    "protoc": "protoc --proto_path=proto --js_out=import_style=commonjs,binary:src/main/middleware/proto --proteus_out=src/main/middleware/proto --plugin=protoc-gen-proteus=node_modules/.bin/proteus_js_protoc_plugin proto/*.proto"
   },
   "author": "Kyle Bahr",
   "license": "MIT",
@@ -15,6 +16,7 @@
     "proteus-js-client": "0.0.5",
     "proteus-js-core": "0.0.5",
     "proteus-js-frames": "^0.0.1",
+    "proteus-js-protobuf": "^0.0.5",
     "react": "15.4.2",
     "react-dom": "15.4.2",
     "react-redux": "^5.0.5",

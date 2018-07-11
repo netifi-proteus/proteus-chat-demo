@@ -47,11 +47,13 @@ function factory({messageToActionAdapter}) {
 					//We create our Proteus client in order to broadcast to our peers
 					chatClient = createClient(proteus);
 
-					//Register our implementation of the Proteus service that reacts to incomming messages from our peers
-					proteus.addService('io.netifi.proteus.demo.ChatService', createServer((payload) => {
-							const data = payload.data.toString('utf8');
-							console.log("Got a thing! " + data);
-							const msg = {data};
+					// Register our implementation of the Proteus service that reacts to incomming messages from our peers
+					// We give it a function to call with the resulting message it decodes from a peer
+					proteus.addService('io.netifi.proteus.demo.chat.Chat', createServer((msg) => {
+
+							// const data = payload.data.toString('utf8');
+							console.log("Received a message: " + msg.data);
+							// const msg = {data};
 							dispatch(messageToActionAdapter(msg) || { type:WEBSOCKET_MESSAGE, payload: msg.data});
 						}));
 
@@ -66,11 +68,22 @@ function factory({messageToActionAdapter}) {
         case WEBSOCKET_SEND:
         	/** New Protues client way */
 					console.log("sending a thing! " + action.payload);
-					if(chatClient){
-						chatClient.sendMessage(action.payload);
-					} else {
-						console.log("Chat Client is not yet initialized");
+					switch(action.payload.type){
+						case "USER_JOINED":
+							chatClient.join(action.payload);
+							break;
+						case "CHAT_MESSAGE":
+							chatClient.sendMessage(action.payload);
+							break;
+						default:
+							console.log("Did not recognize action:" + action.payload.type);
+							break;
 					}
+					// if(chatClient){
+					// 	chatClient.sendMessage(action.payload);
+					// } else {
+					// 	console.log("Chat Client is not yet initialized");
+					// }
 
 					/** WEBSOCKET message send
           socket.send(JSON.stringify(action.payload));

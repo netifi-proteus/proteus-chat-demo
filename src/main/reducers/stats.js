@@ -10,7 +10,7 @@ export default function(state = {}, action){
     case MESSAGE_RECEIVED:
       const {payload:{user:{alias}, timestamp}, payload:{user}} = action;
       const messageCount = state[alias] ? state[alias].messageCount +1 : 1;
-      return {...state, [alias]: {user, lastMessage: timestamp, messageCount }}
+      return {...state, [alias]: {user, lastMessage: timestamp, messageCount }};
     default: return state;
   }
 }
