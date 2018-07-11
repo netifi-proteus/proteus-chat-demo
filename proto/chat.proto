@@ -10,7 +10,6 @@ import "google/protobuf/empty.proto";
 
 service Chat {
 
-    // Returns a Hello World Message
     rpc Chat (ChatEvent) returns (google.protobuf.Empty) {}
 
     rpc Join (JoinEvent) returns (google.protobuf.Empty) {}

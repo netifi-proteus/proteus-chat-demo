@@ -16,7 +16,7 @@
     "proteus-js-client": "0.0.5",
     "proteus-js-core": "0.0.5",
     "proteus-js-frames": "^0.0.1",
-    "proteus-js-protobuf": "^0.0.5",
+    "proteus-js-protobuf": "^0.0.6",
     "react": "15.4.2",
     "react-dom": "15.4.2",
     "react-redux": "^5.0.5",

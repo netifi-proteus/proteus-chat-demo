@@ -10,19 +10,18 @@ var ChatClient = function () {
   function ChatClient(rs) {
     this._rs = rs;
   }
-  // Returns a Hello World Message
   ChatClient.prototype.chat = function chat(message, metadata) {
     var dataBuf = Buffer.from(message.serializeBinary());
-    var metadataBuf = proteus_js_frames.encodeProteusMetadata('io.netifi.proteus.demo.chat.Chat', 'Chat', metadata);
-    return this._rs.fireAndForget({
+    var metadataBuf = proteus_js_frames.encodeProteusMetadata('io.netifi.proteus.demo.chat.Chat', 'Chat', metadata || Buffer.alloc(0));
+    this._rs.fireAndForget({
       data: dataBuf,
       metadata: metadataBuf
     });
   };
   ChatClient.prototype.join = function join(message, metadata) {
     var dataBuf = Buffer.from(message.serializeBinary());
-    var metadataBuf = proteus_js_frames.encodeProteusMetadata('io.netifi.proteus.demo.chat.Chat', 'Join', metadata);
-    return this._rs.fireAndForget({
+    var metadataBuf = proteus_js_frames.encodeProteusMetadata('io.netifi.proteus.demo.chat.Chat', 'Join', metadata || Buffer.alloc(0));
+    this._rs.fireAndForget({
       data: dataBuf,
       metadata: metadataBuf
     });
@@ -37,21 +36,21 @@ var ChatServer = function () {
     this._service = service;
   }
   ChatServer.prototype.fireAndForget = function fireAndForget(payload) {
-    try {
-      if (payload.metadata == null) {
-        return rsocket_flowable.Single.error(new Error('metadata is empty'));
-      }
-      var method = proteus_js_frames.getMethod(payload.metadata);
-      switch (method) {
-        case 'Chat':
-          return this._service.chat(chat_pb.ChatEvent.deserializeBinary(payload.data), payload.metadata);
-        case 'Join':
-          return this._service.join(chat_pb.JoinEvent.deserializeBinary(payload.data), payload.metadata);
-        default:
-          return rsocket_flowable.Single.error(new Error('unknown method'));
-      }
-    } catch (error) {
-      return rsocket_flowable.Single.error(error);
+    if (payload.metadata == null) {
+      throw new Error('metadata is empty');
+    }
+    var method = proteus_js_frames.getMethod(payload.metadata);
+    switch (method) {
+      case 'Chat':
+        this._service
+          .chat(chat_pb.ChatEvent.deserializeBinary(payload.data), payload.metadata);
+        break;
+      case 'Join':
+        this._service
+          .join(chat_pb.JoinEvent.deserializeBinary(payload.data), payload.metadata);
+        break;
+      default:
+        throw new Error('unknown method');
     }
   };
   ChatServer.prototype.requestResponse = function requestResponse(payload) {
