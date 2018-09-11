@@ -36,8 +36,8 @@ function factory({messageToActionAdapter}) {
 					const proteus = Proteus.create({
 						setup: {
 							group: 'chat-demo',
-							accessKey: 9007199254740991,
-							accessToken: 'kTBDVtfRBO4tHOnZzSyY5ym2kfY='
+							accessKey: 4251791065639256,
+							accessToken: '9dCUP/DmzVqOAGMvEVbMtQbCeNs='
 						},
 						transport: {
 							url: action.payload.url

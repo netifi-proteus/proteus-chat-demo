@@ -9,7 +9,7 @@ import {connectToChatServer} from './actions/chat';
 class App extends Component {
 
   componentDidMount(){
-		this.props.connectToChatServer(`ws://edge.prd.netifi.io:8101/`);
+		this.props.connectToChatServer(`wss://43b43ac5-caf6-40ed-b620-6c294ba4a229.broker.netifi.io:8101/`);
   }
 
   render(){
