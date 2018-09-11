@@ -1,6 +1,6 @@
 const {
 	ChatClient
-} = require('./proto/chat_proteus_pb');
+} = require('./proto/chat_rsocket_pb');
 
 const {
 	ChatEvent,

@@ -5,7 +5,7 @@
   "scripts": {
     "build": "webpack --config webpack.production.config.js",
     "start": "webpack --config webpack.production.config.js && http-server ./build/resources/main/ -a 127.0.0.1 -p 3000 -c-1",
-    "protoc": "protoc --proto_path=proto --js_out=import_style=commonjs,binary:src/main/middleware/proto --proteus_out=src/main/middleware/proto --plugin=protoc-gen-proteus=node_modules/.bin/proteus_js_protoc_plugin proto/*.proto"
+    "protoc": "protoc --proto_path=proto --proto_path=node_modules/rsocket-rpc-protobuf/proto --js_out=import_style=commonjs,binary:src/main/middleware/proto --rsocket_rpc_out=src/main/middleware/proto --plugin=protoc-gen-rsocket_rpc=node_modules/.bin/rsocket_rpc_js_protoc_plugin proto/*.proto node_modules/rsocket-rpc-protobuf/proto/rsocket/*.proto"
   },
   "author": "Kyle Bahr",
   "license": "MIT",
@@ -13,10 +13,7 @@
     "babel-preset-es2015": "^6.24.1",
     "moment": "^2.18.1",
     "node-sass": "^4.9.0",
-    "proteus-js-client": "0.0.5",
-    "proteus-js-core": "0.0.5",
-    "proteus-js-frames": "^0.0.1",
-    "proteus-js-protobuf": "^0.0.6",
+    "proteus-js-client": "^0.1.3",
     "react": "15.4.2",
     "react-dom": "15.4.2",
     "react-redux": "^5.0.5",
@@ -47,6 +44,7 @@
     "http-server": "^0.11.1",
     "postcss-loader": "^1.2.2",
     "react-hot-loader": "^3.0.0-beta.6",
+    "rsocket-rpc-protobuf": "^0.1.0",
     "style-loader": "0.13.1",
     "url-loader": "0.5.7",
     "webpack": "^3.2.0"

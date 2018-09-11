@@ -5,7 +5,7 @@ const {
 
 const {
 	ChatServer
-} = require('./proto/chat_proteus_pb');
+} = require('./proto/chat_rsocket_pb');
 
 export default function(next) {
 
